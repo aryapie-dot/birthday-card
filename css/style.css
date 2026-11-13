@@ -1,0 +1,404 @@
+/* ==========================================================================
+   1. CSS Custom Properties (Theme & Palette)
+   ========================================================================== */
+:root {
+    /* Background & Surface Colors */
+    --bg-gradient: radial-gradient(circle at 50% 30%, #fff6f2 0%, #fce7e2 55%, #f8e041 100%);
+    --paper-cream: #fffdf9;
+    --paper-border: #f0e4d7;
+
+    /* Envelope Palette (Warm Rose & Blush) */
+    --env-back: #4c95f5;
+    --env-front: #99cae8;
+    --env-front-shade: #2c5fb1;
+    --env-flap: #1b408b;
+    --wax-red: #b83344;
+    --wax-red-dark: #8f2230;
+
+    /* Typography Colors */
+    --text-primary: #3b2328;
+    --text-secondary: #6e4b52;
+    --accent-gold: #c58f36;
+
+    /* Fonts */
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* Mobile-First Envelope Dimensions */
+    --env-width: 310px;
+    --env-height: 205px;
+}
+
+/* ==========================================================================
+   2. Reset & Base Mobile-First Layout
+   ========================================================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    min-height: 100dvh;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    background: var(--bg-gradient);
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 1.25rem;
+}
+
+/* ==========================================================================
+   3. Ambient Background Floating Layer
+   ========================================================================== */
+#ambient-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    /* Ensures floating elements never block clicks */
+    z-index: 0;
+    overflow: hidden;
+}
+
+.floating-item {
+    position: absolute;
+    bottom: -60px;
+    opacity: 0.65;
+    user-select: none;
+    will-change: transform;
+}
+
+/* ==========================================================================
+   4. Top Header & Music Toggle Button
+   ========================================================================== */
+.top-bar {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 50;
+}
+
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 253, 249, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(217, 130, 139, 0.35);
+    color: var(--text-primary);
+    padding: 0.55rem 0.95rem;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(59, 35, 40, 0.08);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.icon-btn:hover {
+    background: #ffffff;
+    transform: translateY(-1px);
+}
+
+.icon-btn svg {
+    width: 16px;
+    height: 16px;
+    color: var(--wax-red);
+}
+
+/* ==========================================================================
+   5. Main Stage & Intro Typography
+   ========================================================================== */
+.stage {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.intro-text {
+    margin-bottom: 2.25rem;
+}
+
+.subtitle {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent-gold);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.main-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.65rem, 5vw, 2.35rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+/* ==========================================================================
+   6. Interactive 3D Envelope Structure
+   ========================================================================== */
+.envelope-wrapper {
+    position: relative;
+    width: var(--env-width);
+    height: var(--env-height);
+    perspective: 1200px;
+    /* Enables 3D depth for the top flap */
+    cursor: pointer;
+    margin-bottom: 2rem;
+    user-select: none;
+}
+
+.envelope {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 18px 40px rgba(84, 38, 46, 0.18);
+    transform-style: preserve-3d;
+}
+
+/* Layer 1: Inside Back of Envelope */
+.envelope-back {
+    position: absolute;
+    inset: 0;
+    background-color: var(--env-back);
+    border-radius: 10px;
+    z-index: 1;
+}
+
+/* Layer 2: The Birthday Letter (Tucked inside initially) */
+.letter {
+    position: absolute;
+    left: 5%;
+    bottom: 6px;
+    width: 90%;
+    height: 92%;
+    background: var(--paper-cream);
+    border: 1px solid var(--paper-border);
+    border-radius: 8px;
+    padding: 1.25rem 1.15rem;
+    z-index: 2;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Expanded state applied via JS when the letter fully unfolds */
+.letter.is-open {
+    height: auto;
+    min-height: 340px;
+    overflow: visible;
+    box-shadow: 0 22px 50px rgba(59, 35, 40, 0.22);
+}
+
+.letter-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+}
+
+.letter-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--accent-gold);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+.sparkle-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.letter-greeting {
+    font-family: var(--font-serif);
+    font-size: clamp(1.35rem, 4vw, 1.75rem);
+    color: var(--wax-red);
+    line-height: 1.25;
+}
+
+.letter-body {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+}
+
+.letter-signoff {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-top: 0.35rem;
+}
+
+.letter-signoff strong {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--wax-red);
+}
+
+/* Confetti Button inside the open letter */
+.celebrate-btn {
+    margin-top: 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: #fdf2f3;
+    color: var(--wax-red);
+    border: 1px solid rgba(184, 51, 68, 0.25);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.celebrate-btn:hover {
+    background: var(--wax-red);
+    color: #ffffff;
+}
+
+.celebrate-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+/* Layer 3: Front Pocket Fold */
+.envelope-front {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, var(--env-front) 0%, var(--env-front-shade) 100%);
+    border-radius: 10px;
+    z-index: 3;
+    /* Creates the V-shaped envelope pocket opening */
+    clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
+    pointer-events: none;
+}
+
+/* Layer 4: Top Triangular Flap */
+.envelope-flap {
+    position: absolute;
+    inset: 0;
+    background: var(--env-flap);
+    border-radius: 10px 10px 0 0;
+    z-index: 4;
+    /* Triangular top flap pointing down to 58% height */
+    clip-path: polygon(0 0, 50% 58%, 100% 0);
+    transform-origin: top center;
+    /* Hinges at the top edge */
+    backface-visibility: visible;
+    pointer-events: none;
+}
+
+/* Layer 5: Decorative Wax Seal */
+.wax-seal {
+    position: absolute;
+    top: 54%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, var(--wax-red), var(--wax-red-dark));
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(59, 35, 40, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffe8eb;
+    z-index: 5;
+}
+
+.wax-seal svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* ==========================================================================
+   7. Primary Call-to-Action Button
+   ========================================================================== */
+.primary-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--wax-red);
+    color: #ffffff;
+    border: none;
+    padding: 0.85rem 1.75rem;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(184, 51, 68, 0.3);
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary-cta:hover {
+    background: var(--wax-red-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(184, 51, 68, 0.38);
+}
+
+.primary-cta svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* ==========================================================================
+   8. Responsive Breakpoints (Tablet & Desktop)
+   ========================================================================== */
+@media (min-width: 640px) {
+    :root {
+        --env-width: 400px;
+        --env-height: 260px;
+    }
+
+    .letter {
+        padding: 1.75rem 1.85rem;
+    }
+
+    .letter.is-open {
+        min-height: 380px;
+    }
+
+    .letter-body {
+        font-size: 1rem;
+    }
+
+    .wax-seal {
+        width: 56px;
+        height: 56px;
+    }
+}

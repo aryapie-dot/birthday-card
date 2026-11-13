@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday! ✨</title>
+
+    <!-- Google Fonts: Playfair Display (Elegant Serif) & Plus Jakarta Sans (Clean Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <!-- Background Ambient Floating Elements (Populated by JS) -->
+    <div id="ambient-container" aria-hidden="true"></div>
+
+    <!-- Top Controls: Local Background Music Toggle -->
+    <header class="top-bar">
+        <button id="music-toggle" class="icon-btn" aria-label="Toggle Background Music" title="Play/Pause Music">
+            <i data-lucide="volume-x" id="music-icon"></i>
+            <span class="btn-label">Play Music</span>
+        </button>
+        <!-- Local Audio File (No autoplay; triggered on user interaction) -->
+        <audio id="bg-music" loop preload="metadata">
+            <source src="assets/music/birthday-music.mp3" type="audio/mpeg" />
+        </audio>
+    </header>
+
+    <!-- Main Stage -->
+    <main class="stage">
+
+        <!-- Intro Prompt -->
+        <div class="intro-text" id="intro-text">
+            <p class="subtitle">A special delivery just for you</p>
+            <h1 class="main-title">Tap to open your card</h1>
+        </div>
+
+        <!-- Interactive 3D Envelope Wrapper -->
+        <div class="envelope-wrapper" id="envelope-wrapper" role="button" tabindex="0" aria-label="Open birthday card">
+            <div class="envelope" id="envelope">
+
+                <!-- 1. Back of the Envelope -->
+                <div class="envelope-back"></div>
+
+                <!-- 2. The Birthday Letter (Slides out when opened) -->
+                <article class="letter" id="letter">
+                    <div class="letter-inner">
+                        <div class="letter-header">
+                            <i data-lucide="sparkles" class="sparkle-icon"></i>
+                            <span class="date-tag">Celebrate Today</span>
+                        </div>
+
+                        <!-- CUSTOMISE YOUR MESSAGE HERE -->
+                        <h2 class="letter-greeting" id="recipient-name">Happy Birthday, Sarah!</h2>
+
+                        <p class="letter-body" id="birthday-message">
+                            Wishing you a day filled with warmth, laughter, and all the little moments that make life
+                            wonderful. May this new chapter bring you endless joy and unforgettable adventures.
+                        </p>
+
+                        <p class="letter-signoff">
+                            With love,<br />
+                            <strong id="sender-name">Alex</strong>
+                        </p>
+
+                        <!-- Action button inside the open letter -->
+                        <button id="celebrate-btn" class="celebrate-btn" type="button">
+                            <i data-lucide="party-popper"></i>
+                            <span>Send More Confetti</span>
+                        </button>
+                    </div>
+                </article>
+
+                <!-- 3. Front Envelope Pocket (Left, Right, Bottom folds) -->
+                <div class="envelope-front"></div>
+
+                <!-- 4. Top Envelope Flap (Rotates open in 3D) -->
+                <div class="envelope-flap" id="envelope-flap"></div>
+
+                <!-- 5. Decorative Wax Seal Button -->
+                <div class="wax-seal" id="wax-seal">
+                    <i data-lucide="heart"></i>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Clear Call-to-Action Button below the envelope -->
+        <button id="open-card-btn" class="primary-cta">
+            <span>Open Card</span>
+            <i data-lucide="mail-open"></i>
+        </button>
+
+    </main>
+
+    <!-- Libraries via CDN (Zero backend/build step required) -->
+    <!-- 1. Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- 2. GSAP (GreenSock Animation Platform) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- 3. Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <!-- Main Application Logic -->
+    <script src="js/script.js"></script>
+</body>
+
+</html>
